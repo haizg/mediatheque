@@ -1,17 +1,26 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
+    public static void main(String[] args) {
+        Catalogue<Document> catalogue = new Catalogue<>();
+        catalogue.ajouter(new Livre("Dune", "Herbert"));
+        catalogue.ajouter(new Dvd("Matrix", 136));
+        catalogue.ajouter(new Revue("Science & Vie", 1290));
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+        catalogue.afficherTout();
+
+        System.out.println(catalogue.rechercherParTitre("dune")
+                .map(Document::descriptionCourte)
+                .orElse("Introuvable"));
+
+        System.out.println("Max (ordre alphabétique) : " + Outils.max(catalogue.getItems()));
+
+        Livre l = new Livre("1984", "Orwell");
+        l.emprunter();
+        try {
+            l.emprunter();
+        } catch (IllegalStateException e) {
+            System.out.println("Erreur attendue : " + e.getMessage());
         }
     }
 }
