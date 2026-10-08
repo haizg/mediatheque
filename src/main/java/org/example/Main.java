@@ -16,12 +16,15 @@ public class Main {
         System.out.println("Max (ordre alphabétique) : "
                 + Catalogue.max(catalogue.getItems()).descriptionCourte());
 
-        Livre l = new Livre("1984", "Orwell");
-        l.emprunter();
-        try {
-            l.emprunter();
-        } catch (IllegalStateException e) {
-            System.out.println("Erreur attendue : " + e.getMessage());
+        EmpruntManager manager = new EmpruntManager(catalogue);
+        try (RapportEmprunts rapport = new RapportEmprunts()) {
+            manager.emprunter("Dune");
+            rapport.enregistrer("Dune emprunté");
+            manager.emprunter("Dune"); // double emprunt -> exception
+        } catch (DocumentIndisponibleException e) {
+            System.out.println("Indisponible : " + e.getMessage());
+        } catch (MediathequeException e) {
+            System.out.println("Erreur : " + e.getMessage());
         }
     }
 }
