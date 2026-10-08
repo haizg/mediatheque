@@ -1,17 +1,12 @@
 package org.example;
 
 public class Dvd extends Document implements Empruntable {
-    private final int duree;
+    private final int dureeMinutes;
     private boolean emprunte;
 
-    public Dvd(String titre, int duree) {
+    public Dvd(String titre, int dureeMinutes) {
         super(titre);
-        this.duree = duree;
-    }
-
-    @Override
-    public String descriptionCourte() {
-        return "DVD : " + getTitre() + " (" + duree + " min)";
+        this.dureeMinutes = dureeMinutes;
     }
 
     @Override
@@ -25,4 +20,9 @@ public class Dvd extends Document implements Empruntable {
 
     @Override
     public boolean estEmprunte() { return emprunte; }
+
+    @Override
+    public String descriptionCourte() {
+        return "DVD : " + getTitre() + " (" + dureeMinutes + " min)";
+    }
 }

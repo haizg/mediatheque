@@ -1,7 +1,7 @@
 package org.example;
 
 public interface Empruntable {
-    void emprunter();          // IllegalStateException si déjà emprunté
+    void emprunter();
     void rendre();
     boolean estEmprunte();
 }

@@ -9,10 +9,7 @@ public class Livre extends Document implements Empruntable {
         this.auteur = auteur;
     }
 
-    @Override
-    public String descriptionCourte() {
-        return "Livre : " + getTitre() + " (" + auteur + ")";
-    }
+    public String getAuteur() { return auteur; }
 
     @Override
     public void emprunter() {
@@ -25,4 +22,9 @@ public class Livre extends Document implements Empruntable {
 
     @Override
     public boolean estEmprunte() { return emprunte; }
+
+    @Override
+    public String descriptionCourte() {
+        return "Livre : " + getTitre() + " (" + auteur + ")";
+    }
 }

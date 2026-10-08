@@ -13,7 +13,8 @@ public class Main {
                 .map(Document::descriptionCourte)
                 .orElse("Introuvable"));
 
-        System.out.println("Max (ordre alphabétique) : " + Outils.max(catalogue.getItems()));
+        System.out.println("Max (ordre alphabétique) : "
+                + Catalogue.max(catalogue.getItems()).descriptionCourte());
 
         Livre l = new Livre("1984", "Orwell");
         l.emprunter();

@@ -1,6 +1,6 @@
 package org.example;
 
-abstract class Document implements Comparable<Document> {
+public abstract class Document implements Comparable<Document> {
     private final String titre;
 
     protected Document(String titre) {
