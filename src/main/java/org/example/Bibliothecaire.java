@@ -21,6 +21,8 @@ public class Bibliothecaire {
     }
 
     public void afficherCatalogue() {
-        catalogue.afficherTout();
+        for (Document d : catalogue) {
+            System.out.println(d.descriptionCourte());
+        }
     }
 }

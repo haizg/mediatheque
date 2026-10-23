@@ -7,7 +7,9 @@ public class Main {
         catalogue.ajouter(new Dvd("Matrix", 136));
         catalogue.ajouter(new Revue("Science & Vie", 1290));
 
-        catalogue.afficherTout();
+        for (Document d : catalogue) {
+            System.out.println(d.descriptionCourte());
+        }
 
         System.out.println(catalogue.rechercherParTitre("dune")
                 .map(Document::descriptionCourte)
@@ -20,7 +22,7 @@ public class Main {
         try (RapportEmprunts rapport = new RapportEmprunts()) {
             manager.emprunter("Dune");
             rapport.enregistrer("Dune emprunté");
-            manager.emprunter("Dune"); // double emprunt -> exception
+            manager.emprunter("Dune");
         } catch (DocumentIndisponibleException e) {
             System.out.println("Indisponible : " + e.getMessage());
         } catch (MediathequeException e) {
