@@ -1,32 +1,22 @@
 package org.example;
 
+import java.nio.file.Path;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
-        Catalogue<Document> catalogue = new Catalogue<>();
-        catalogue.ajouter(new Livre("Dune", "Herbert"));
-        catalogue.ajouter(new Dvd("Matrix", 136));
-        catalogue.ajouter(new Revue("Science & Vie", 1290));
+        List<Document> docs = List.of(
+                new Livre(1, "Dune", "Herbert"),
+                new Livre(2, "1984", "Orwell"));
 
-        for (Document d : catalogue) {
-            System.out.println(d.descriptionCourte());
-        }
-
-        System.out.println(catalogue.rechercherParTitre("dune")
-                .map(Document::descriptionCourte)
-                .orElse("Introuvable"));
-
-        System.out.println("Max (ordre alphabétique) : "
-                + Catalogue.max(catalogue.getItems()).descriptionCourte());
-
-        EmpruntManager manager = new EmpruntManager(catalogue);
-        try (RapportEmprunts rapport = new RapportEmprunts()) {
-            manager.emprunter("Dune");
-            rapport.enregistrer("Dune emprunté");
-            manager.emprunter("Dune");
-        } catch (DocumentIndisponibleException e) {
-            System.out.println("Indisponible : " + e.getMessage());
-        } catch (MediathequeException e) {
-            System.out.println("Erreur : " + e.getMessage());
+        RapportService service = new RapportService(
+                new FormatCsv(),
+                new SortieFichier(Path.of("rapport.csv")),
+                new NotificateurSmtp(new ServeurSmtp("smtp.itbs.tn"), "direction@itbs.tn"));
+        try {
+            service.genererRapport(docs);
+        } catch (RapportException e) {
+            System.err.println("Erreur : " + e.getMessage());
         }
     }
 }
