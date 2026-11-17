@@ -20,7 +20,7 @@ class RapportServiceTest {
 
         RapportService service =
                 new RapportService(fauxFormat, fausseSortie, fauxNotificateur);
-        service.genererRapport(List.of(new Livre("Dune", "Herbert")));
+        service.genererRapport(List.of(new Livre.Builder("Dune", "Herbert").build()));
 
         assertEquals(List.of("CONTENU-FAUX"), ecrit);
         assertEquals(1, messages.size());

@@ -10,7 +10,7 @@ class JsonFormatTest {
 
     @Test
     void genereUnTableauJson() {
-        String json = new JsonFormat().generer(List.of(new Livre("Dune", "Herbert")));
+        String json = new JsonFormat().generer(List.of(new Livre.Builder("Dune", "Herbert").build()));
         assertEquals("[\n  {\"titre\": \"Dune\", \"type\": \"Livre\"}\n]\n", json);
     }
 

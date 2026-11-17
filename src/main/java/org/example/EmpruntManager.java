@@ -3,16 +3,16 @@ package org.example;
 import java.time.LocalDate;
 
 public class EmpruntManager {
-    private final Catalogue<Document> catalogue; // COMPOSITION
+    private final Catalogue<Document> catalogue;         // COMPOSITION
+    private final ConfigurationMediatheque config;       // INJECTEE (DIP)
     private int empruntsEnCours = 0;
 
-    public EmpruntManager(Catalogue<Document> catalogue) {
+    public EmpruntManager(Catalogue<Document> catalogue, ConfigurationMediatheque config) {
         this.catalogue = catalogue;
+        this.config = config;
     }
 
     public void emprunter(String titre) throws MediathequeException {
-        // dependance cachee vers un singleton : on la corrige a l'etape 3
-        ConfigurationMediatheque config = ConfigurationMediatheque.getInstance();
         if (empruntsEnCours >= config.getMaxEmprunts()) {
             throw new DocumentIndisponibleException(
                     "Limite d'emprunts atteinte : " + config.getMaxEmprunts());
@@ -31,6 +31,6 @@ public class EmpruntManager {
     }
 
     public LocalDate dateRetourPrevue() {
-        return LocalDate.now().plusDays(ConfigurationMediatheque.getInstance().getDureeEmprunt());
+        return LocalDate.now().plusDays(config.getDureeEmprunt());
     }
 }

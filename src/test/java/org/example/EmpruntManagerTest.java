@@ -13,17 +13,24 @@ class EmpruntManagerTest {
         return c;
     }
 
+    private Livre dune() {
+        return new Livre.Builder("Dune", "Herbert").build();
+    }
+
+    private EmpruntManager manager(Catalogue<Document> c) {
+        return new EmpruntManager(c, new ConfigurationMediatheque(21, 5));
+    }
+
     @Test
     void empruntNominal() throws MediathequeException {
-        Livre dune = new Livre("Dune", "Herbert");
-        new EmpruntManager(catalogueAvecDune(dune)).emprunter("Dune");
+        Livre dune = dune();
+        manager(catalogueAvecDune(dune)).emprunter("Dune");
         assertTrue(dune.estEmprunte());
     }
 
     @Test
     void doubleEmpruntLeveExceptionAvecLeTitre() throws MediathequeException {
-        Livre dune = new Livre("Dune", "Herbert");
-        EmpruntManager manager = new EmpruntManager(catalogueAvecDune(dune));
+        EmpruntManager manager = manager(catalogueAvecDune(dune()));
         manager.emprunter("Dune");
 
         DocumentIndisponibleException e = assertThrows(
@@ -34,13 +41,13 @@ class EmpruntManagerTest {
 
     @Test
     void documentIntrouvable() {
-        EmpruntManager manager = new EmpruntManager(catalogueAvecDune(new Livre("Dune", "Herbert")));
+        EmpruntManager manager = manager(catalogueAvecDune(dune()));
         assertThrows(DocumentIntrouvableException.class, () -> manager.emprunter("Inconnu"));
     }
 
     @Test
     void revueNonEmpruntable() {
-        EmpruntManager manager = new EmpruntManager(catalogueAvecDune(new Livre("Dune", "Herbert")));
+        EmpruntManager manager = manager(catalogueAvecDune(dune()));
         assertThrows(DocumentIndisponibleException.class, () -> manager.emprunter("Science & Vie"));
     }
 

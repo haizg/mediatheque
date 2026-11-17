@@ -10,7 +10,7 @@ class CatalogueIterationTest {
 
     private Catalogue<Document> catalogue() {
         Catalogue<Document> c = new Catalogue<>();
-        c.ajouter(new Livre("Dune", "Herbert"));
+        c.ajouter(new Livre.Builder("Dune", "Herbert").build());
         c.ajouter(new Dvd("Matrix", 136));
         return c;
     }

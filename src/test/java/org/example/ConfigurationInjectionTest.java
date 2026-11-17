@@ -1,26 +1,38 @@
 package org.example;
 
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ConfigurationSingletonTest {
+// Plus d'etat global : chaque test cree SA configuration.
+// Les tests passent dans n'importe quel ordre.
+class ConfigurationInjectionTest {
 
-    @Test
-    @Order(1)
-    void dureePersonnalisee() {
-        ConfigurationMediatheque.getInstance().setDureeEmprunt(7);
-        assertEquals(7, ConfigurationMediatheque.getInstance().getDureeEmprunt());
+    private Catalogue<Document> catalogue() {
+        Catalogue<Document> c = new Catalogue<>();
+        c.ajouter(new Livre.Builder("Dune", "Herbert").build());
+        c.ajouter(new Livre.Builder("1984", "Orwell").build());
+        return c;
     }
 
     @Test
-    @Order(2)
+    void dureePersonnalisee() {
+        EmpruntManager manager = new EmpruntManager(catalogue(), new ConfigurationMediatheque(7, 5));
+        assertEquals(LocalDate.now().plusDays(7), manager.dateRetourPrevue());
+    }
+
+    @Test
     void dureeParDefaut() {
-        assertEquals(21, ConfigurationMediatheque.getInstance().getDureeEmprunt());
+        EmpruntManager manager = new EmpruntManager(catalogue(), new ConfigurationMediatheque(21, 5));
+        assertEquals(LocalDate.now().plusDays(21), manager.dateRetourPrevue());
+    }
+
+    @Test
+    void limiteDEmpruntsRespectee() throws MediathequeException {
+        EmpruntManager manager = new EmpruntManager(catalogue(), new ConfigurationMediatheque(21, 1));
+        manager.emprunter("Dune");
+        assertThrows(DocumentIndisponibleException.class, () -> manager.emprunter("1984"));
     }
 }
