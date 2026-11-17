@@ -1,0 +1,57 @@
+@startuml
+title RapportService - architecture cible (SRP, OCP, DIP)
+skinparam classAttributeIconSize 0
+
+class RapportService {
+  - format : FormatRapport
+  - sortie : SortieRapport
+  - notificateur : Notificateur
+  + RapportService(format, sortie, notificateur)
+  + genererRapport(docs) : void
+}
+
+interface FormatRapport {
+  + generer(docs) : String
+}
+interface SortieRapport {
+  + ecrire(contenu) : void
+}
+interface Notificateur {
+  + notifier(message) : void
+}
+
+class FormatCsv
+class FormatTxt
+class JsonFormat
+class SortieFichier
+class NotificateurSmtp
+class ServeurSmtp
+class RapportException
+class Document
+
+RapportService o--> FormatRapport
+RapportService o--> SortieRapport
+RapportService o--> Notificateur
+
+FormatCsv ..|> FormatRapport
+FormatTxt ..|> FormatRapport
+JsonFormat ..|> FormatRapport
+SortieFichier ..|> SortieRapport
+NotificateurSmtp ..|> Notificateur
+
+NotificateurSmtp --> ServeurSmtp
+FormatRapport ..> Document : lit
+SortieRapport ..> RapportException : leve
+
+note right of RapportService
+  SRP : contenu / ecriture / notification
+  separes en trois responsabilites.
+  DIP : aucun new de detail technique,
+  tout est injecte par le constructeur.
+end note
+
+note bottom of JsonFormat
+  OCP : ajoute sans modifier
+  aucun fichier existant.
+end note
+@enduml
