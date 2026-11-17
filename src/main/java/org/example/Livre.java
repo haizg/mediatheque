@@ -8,7 +8,7 @@ public class Livre extends Document implements Empruntable {
     private final Integer nbPages;
     private boolean emprunte;
 
-    // PROTECTED (pas private) : LivreAudio doit pouvoir appeler super(builder).
+    // PROTECTED (pas private) : un futur LivreAudio doit pouvoir appeler super(builder).
     // La validation est faite ICI, donc aucun chemin ne contourne les regles.
     protected Livre(Builder b) {
         super(b.valider().titre);
@@ -17,6 +17,19 @@ public class Livre extends Document implements Empruntable {
         this.editeur = b.editeur;
         this.langue = b.langue;
         this.nbPages = b.nbPages;
+    }
+
+    // PROTOTYPE : constructeur de copie.
+    // Les champs sont des String/Integer immuables : les partager est sans risque.
+    // Choix metier : la copie est un NOUVEL exemplaire (nouvel id, non emprunte).
+    public Livre(Livre original) {
+        super(original.getTitre());
+        this.auteur = original.auteur;
+        this.isbn = original.isbn;
+        this.editeur = original.editeur;
+        this.langue = original.langue;
+        this.nbPages = original.nbPages;
+        // emprunte reste false : on ne copie pas l'etat d'emprunt
     }
 
     public static class Builder {

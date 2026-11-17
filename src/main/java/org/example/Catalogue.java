@@ -12,6 +12,15 @@ import java.util.stream.Stream;
 public class Catalogue<T extends Document> implements Iterable<T> {
     private final List<T> elements = new ArrayList<>();
 
+    // Obligatoire : declarer un autre constructeur supprime celui par defaut
+    public Catalogue() { }
+
+    // PROTOTYPE : copie SUPERFICIELLE voulue.
+    // Nouvelle liste (independante), mais memes documents (exemplaires partages).
+    public Catalogue(Catalogue<? extends T> original) {
+        elements.addAll(original.elements);
+    }
+
     public void ajouter(T element) {
         elements.add(Objects.requireNonNull(element));
     }
