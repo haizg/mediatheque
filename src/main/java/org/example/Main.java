@@ -6,8 +6,8 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         List<Document> docs = List.of(
-                new Livre(1, "Dune", "Herbert"),
-                new Livre(2, "1984", "Orwell"));
+                new Livre( "Dune", "Herbert"),
+                new Livre( "1984", "Orwell"));
 
         RapportService service = new RapportService(
                 new FormatCsv(),
